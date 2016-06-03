@@ -43,6 +43,15 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.4'
     provided 'org.glassfish:javax.annotation:10.0-b28'
 
+    // Networking
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+
+    // Rx
+    compile 'io.reactivex:rxandroid:1.2.0'
+    compile 'io.reactivex:rxkotlin:0.55.0'
+
     testCompile 'junit:junit:4.12'
 }
 
