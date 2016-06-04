@@ -21,4 +21,6 @@ class GitHubService {
             return gitHubApiService.searchRepositories(query).map { it.items }
         }
     }
+
+    fun getRepository(owner: String, repository: String) = gitHubApiService.getRepository(owner, repository)
 }

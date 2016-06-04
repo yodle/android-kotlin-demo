@@ -8,24 +8,17 @@
 
     <include layout="@layout/toolbar" />
 
-    <com.yodle.android.kotlindemo.view.SearchCardView
-        android:id="@+id/mainSearchCardView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primary"
-        android:elevation="4dp" />
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/mainResultsRecycler"
+            android:id="@+id/repositoryDetailRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <ProgressBar
-            android:id="@+id/mainResultsSpinner"
+            android:id="@+id/repositoryDetailSpinner"
             style="?android:progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
