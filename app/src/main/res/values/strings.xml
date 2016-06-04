@@ -1,3 +1,12 @@
 <resources>
+
     <string name="app_name">Kotlin Demo</string>
+
+    <string name="sans_serif">sans-serif</string>
+    <string name="sans_serif_light">sans-serif-light</string>
+    <string name="sans_serif_black">sans-serif-black</string>
+    <string name="sans_serif_medium">sans-serif-medium</string>
+
+    <string name="search_repositories">Search repositories…</string>
+
 </resources>
