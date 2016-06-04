@@ -3,6 +3,7 @@ package com.yodle.android.kotlindemo.service
 import com.yodle.android.kotlindemo.MainApp
 import com.yodle.android.kotlindemo.model.Repository
 import rx.Observable
+import java.util.*
 import javax.inject.Inject
 
 class GitHubService {
@@ -14,7 +15,10 @@ class GitHubService {
     }
 
     fun searchRepositories(query: String): Observable<List<Repository>> {
-        return gitHubApiService.searchRepositories(query).map { it.items }
+        if (query.isBlank()) {
+            return Observable.just(ArrayList())
+        } else {
+            return gitHubApiService.searchRepositories(query).map { it.items }
+        }
     }
-
 }

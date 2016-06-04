@@ -4,6 +4,8 @@ import android.app.Application
 import com.yodle.android.kotlindemo.dagger.AppComponent
 import com.yodle.android.kotlindemo.dagger.AppModule
 import com.yodle.android.kotlindemo.dagger.DaggerAppComponent
+import net.danlew.android.joda.JodaTimeAndroid
+import timber.log.Timber
 
 class MainApp : Application() {
 
@@ -14,7 +16,11 @@ class MainApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        graph = DaggerAppComponent.builder().appModule(AppModule(this)).build();
+        Timber.plant(Timber.DebugTree())
+
+        JodaTimeAndroid.init(this)
+
+        graph = DaggerAppComponent.builder().appModule(AppModule(this)).build()
         graph.inject(this)
     }
 }

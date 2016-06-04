@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/material_padding"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="@dimen/material_padding_half"
+    card_view:cardCornerRadius="2dp">
+
+    <EditText
+        android:id="@+id/searchCardEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="@dimen/material_padding_half"
+        android:layout_marginLeft="@dimen/material_padding_half"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="@dimen/material_padding_half"
+        android:background="@null"
+        android:drawableLeft="@drawable/ic_search"
+        android:drawablePadding="22dp"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
+        tools:text="John Doe" />
+
+    <ImageButton
+        android:id="@+id/searchCardClear"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical|right"
+        android:layout_marginRight="@dimen/material_padding_half"
+        android:background="?attr/selectableItemBackground"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_cancel" />
+</android.support.v7.widget.CardView>
