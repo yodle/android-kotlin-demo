@@ -63,7 +63,7 @@ class MainActivity : BaseActivity(), Observer<List<Repository>> {
         searchEditText.setHint(R.string.search_repositories)
         RxTextView.textChanges(searchEditText)
                 .doOnNext { showProgressSpinner() }
-                .sample(500, TimeUnit.MILLISECONDS)
+                .sample(1, TimeUnit.SECONDS)
                 .switchMap { gitHubService.searchRepositories(it.toString()).subscribeOn(Schedulers.io()) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this)
