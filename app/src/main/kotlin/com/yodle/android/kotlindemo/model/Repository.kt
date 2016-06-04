@@ -5,6 +5,7 @@ data class Repository(
         val name: String,
         val full_name: String,
         val owner: RepositoryOwner,
+        val html_url: String,
         val description: String,
         val url: String,
         val created_at: String,
