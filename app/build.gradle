@@ -36,7 +36,9 @@ dependencies {
 
     // Support Libraries
     compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.android.support:cardview-v7:23.4.0'
 
     // Dagger 2
     compile 'com.google.dagger:dagger:2.4'
@@ -47,10 +49,20 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 
     // Rx
     compile 'io.reactivex:rxandroid:1.2.0'
     compile 'io.reactivex:rxkotlin:0.55.0'
+    compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+
+    // Date
+    compile 'net.danlew:android.joda:2.9.3.1'
+    compile 'com.ocpsoft:ocpsoft-pretty-time:1.0.7'
+
+    // Logging
+    compile 'com.jakewharton.timber:timber:4.1.2'
 
     testCompile 'junit:junit:4.12'
 }
