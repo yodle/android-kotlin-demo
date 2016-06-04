@@ -1,5 +1,14 @@
 <resources>
 
     <dimen name="material_padding">16dp</dimen>
+    <dimen name="material_padding_half">8dp</dimen>
+    <dimen name="material_padding_quarter">4dp</dimen>
+    <dimen name="material_padding_double">32dp</dimen>
+    <dimen name="material_list_padding_left">72dp</dimen>
+
+    <dimen name="divider_size">1dp</dimen>
+
+    <dimen name="primary_font_size">16sp</dimen>
+    <dimen name="secondary_font_size">13sp</dimen>
 
 </resources>
