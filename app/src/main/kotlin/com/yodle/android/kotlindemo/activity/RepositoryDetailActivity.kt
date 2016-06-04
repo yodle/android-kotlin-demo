@@ -8,18 +8,21 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v7.graphics.Palette
 import android.view.View
+import android.webkit.WebChromeClient
+import android.webkit.WebView
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.yodle.android.kotlindemo.MainApp
 import com.yodle.android.kotlindemo.R
 import com.yodle.android.kotlindemo.model.Repository
+import com.yodle.android.kotlindemo.model.RepositoryReadme
 import com.yodle.android.kotlindemo.service.GitHubService
 import kotlinx.android.synthetic.main.activity_repository_detail.*
 import rx.Observer
 import timber.log.Timber
 import javax.inject.Inject
 
-class RepositoryDetailActivity : BaseActivity(), Observer<Repository> {
+class RepositoryDetailActivity : BaseActivity(), Observer<RepositoryReadme> {
 
     companion object {
         val OWNER_KEY = "owner_key"
@@ -53,24 +56,33 @@ class RepositoryDetailActivity : BaseActivity(), Observer<Repository> {
         supportActionBar?.title = "$owner/$repository"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        loadRepositoryDetails(owner, repository)
         loadRepositoryImage(imageUrl)
 
         repositoryDetailFab.setOnClickListener { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(repositoryUrl))) }
 
-//        repositoryDetailSpinner.visibility = View.VISIBLE
-//        subscribe(gitHubService.getRepository(owner, repository), this)
+        repositoryDetailWebView.setWebChromeClient(object : WebChromeClient() {
+            override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                repositoryDetailSpinner.visibility = if (newProgress == 100) View.GONE else View.VISIBLE
+            }
+        })
     }
 
     override fun onCompleted() {
     }
 
     override fun onError(e: Throwable) {
-        Timber.e(e, "Failed to load repository details")
+        Timber.e(e, "Failed to load repository readme")
         repositoryDetailSpinner.visibility = View.GONE
     }
 
-    override fun onNext(repository: Repository) {
-        repositoryDetailSpinner.visibility = View.GONE
+    override fun onNext(readme: RepositoryReadme) {
+        repositoryDetailWebView.loadUrl(readme.html_url)
+    }
+
+    fun loadRepositoryDetails(owner: String, repository: String) {
+        repositoryDetailSpinner.visibility = View.VISIBLE
+        subscribe(gitHubService.getRepositoryReadme(owner, repository), this)
     }
 
     fun loadRepositoryImage(imageUrl: String) {
