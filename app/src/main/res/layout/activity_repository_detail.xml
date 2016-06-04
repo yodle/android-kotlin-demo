@@ -48,11 +48,10 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/material_padding"
-            android:text="@string/large_text" />
+        <WebView
+            android:id="@+id/repositoryDetailWebView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </android.support.v4.widget.NestedScrollView>
 
@@ -61,7 +60,8 @@
         style="?android:progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="200dp"
         android:visibility="gone" />
 
     <android.support.design.widget.FloatingActionButton
