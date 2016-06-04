@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.ocpsoft.pretty.time.PrettyTime
 import com.squareup.picasso.Picasso
 import com.yodle.android.kotlindemo.R
+import com.yodle.android.kotlindemo.activity.RepositoryDetailActivity
 import com.yodle.android.kotlindemo.model.Repository
 import kotlinx.android.synthetic.main.repository_item.view.*
 import org.joda.time.DateTime
@@ -36,11 +37,16 @@ class RepositoryAdapter(val context: Context) : RecyclerView.Adapter<RepositoryA
         fun bind(repository: Repository) {
             val updatedTime = prettyTime.format(DateTime(repository.pushed_at).toDate());
 
-            Picasso.with(context).load(repository.owner.avatar_url).into(itemView.repositoryItemImage)
             itemView.repositoryItemTitle.text = repository.full_name
             itemView.repositoryItemDescription.text = repository.description
             itemView.repositoryItemLastUpdated.text = "Updated $updatedTime"
             itemView.repositoryItemStarCount.text = NumberFormat.getInstance().format(repository.watchers_count)
+
+            Picasso.with(context).load(repository.owner.avatar_url).into(itemView.repositoryItemImage)
+
+            itemView.repositoryItemRootLayout.setOnClickListener {
+                context.startActivity(RepositoryDetailActivity.getIntent(context, repository))
+            }
         }
     }
 }
