@@ -8,5 +8,6 @@
     <string name="sans_serif_medium">sans-serif-medium</string>
 
     <string name="search_repositories">Search repositories…</string>
+    <string name="search_repositories_error">Error performing search, disabling search field</string>
 
 </resources>

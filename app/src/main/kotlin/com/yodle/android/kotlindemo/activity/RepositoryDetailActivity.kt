@@ -10,16 +10,12 @@ import com.yodle.android.kotlindemo.R
 import com.yodle.android.kotlindemo.extension.*
 import com.yodle.android.kotlindemo.model.Repository
 import com.yodle.android.kotlindemo.model.RepositoryParcel
-import com.yodle.android.kotlindemo.model.RepositoryReadme
 import com.yodle.android.kotlindemo.service.GitHubService
 import kotlinx.android.synthetic.main.activity_repository_detail.*
-import rx.Observer
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
 
-class RepositoryDetailActivity : BaseActivity(), Observer<RepositoryReadme> {
+class RepositoryDetailActivity : BaseActivity() {
 
     companion object {
         val REPOSITORY_KEY = "repository_key"
@@ -46,36 +42,33 @@ class RepositoryDetailActivity : BaseActivity(), Observer<RepositoryReadme> {
 
         loadRepositoryDetails(repository.owner.login, repository.name)
         loadRepositoryImage(repository.owner.avatar_url)
-
         repositoryDetailFab.setOnClickListener { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(repository.html_url))) }
-
         repositoryDetailWebView.setProgressChangedListener { progress -> repositoryDetailSpinner.showIf(progress < 100) }
-    }
-
-    override fun onCompleted() {
-    }
-
-    override fun onError(e: Throwable) {
-        Timber.e(e, "Failed to load repository readme")
-        repositoryDetailSpinner.hide()
-    }
-
-    override fun onNext(readme: RepositoryReadme) {
-        repositoryDetailWebView.loadUrl(readme.html_url)
     }
 
     fun loadRepositoryDetails(owner: String, repository: String) {
         gitHubService.getRepositoryReadme(owner, repository)
                 .doOnSubscribe { repositoryDetailSpinner.show() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this)
+                .subscribeOnIo()
+                .subscribeUntilDestroy(this) {
+                    onNext {
+                        repositoryDetailWebView.loadUrl(it.html_url)
+                    }
+                    onError {
+                        Timber.e(it, "Failed to load repository readme")
+                        repositoryDetailSpinner.hide()
+                    }
+                }
     }
 
     fun loadRepositoryImage(imageUrl: String) {
         repositoryDetailImage.loadUrl(imageUrl) {
-            onSuccess { setToolbarColorFromImage() }
-            onError { Timber.e("Failed to load image") }
+            onSuccess {
+                setToolbarColorFromImage()
+            }
+            onError {
+                Timber.e("Failed to load image")
+            }
         }
     }
 
