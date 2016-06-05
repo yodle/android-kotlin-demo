@@ -12,6 +12,7 @@ import com.yodle.android.kotlindemo.MainApp
 import com.yodle.android.kotlindemo.R
 import com.yodle.android.kotlindemo.extension.*
 import com.yodle.android.kotlindemo.model.Repository
+import com.yodle.android.kotlindemo.model.RepositoryParcel
 import com.yodle.android.kotlindemo.model.RepositoryReadme
 import com.yodle.android.kotlindemo.service.GitHubService
 import kotlinx.android.synthetic.main.activity_repository_detail.*
@@ -22,17 +23,11 @@ import javax.inject.Inject
 class RepositoryDetailActivity : BaseActivity(), Observer<RepositoryReadme> {
 
     companion object {
-        val OWNER_KEY = "owner_key"
         val REPOSITORY_KEY = "repository_key"
-        val IMAGE_URL_KEY = "image_url_key"
-        val REPOSITORY_URL_KEY = "repository_url_key"
 
         @JvmStatic fun getIntent(context: Context, repository: Repository): Intent {
             val intent = Intent(context, RepositoryDetailActivity::class.java)
-            intent.putExtra(OWNER_KEY, repository.owner.login)
-            intent.putExtra(REPOSITORY_KEY, repository.name)
-            intent.putExtra(IMAGE_URL_KEY, repository.owner.avatar_url)
-            intent.putExtra(REPOSITORY_URL_KEY, repository.html_url)
+            intent.putExtra(REPOSITORY_KEY, RepositoryParcel(repository))
             return intent
         }
     }
@@ -44,19 +39,16 @@ class RepositoryDetailActivity : BaseActivity(), Observer<RepositoryReadme> {
         setContentView(R.layout.activity_repository_detail)
         MainApp.graph.inject(this)
 
-        val owner = intent.getStringExtra(OWNER_KEY)
-        val repository = intent.getStringExtra(REPOSITORY_KEY)
-        val imageUrl = intent.getStringExtra(IMAGE_URL_KEY)
-        val repositoryUrl = intent.getStringExtra(REPOSITORY_URL_KEY)
+        val repository = intent.getParcelableExtra<RepositoryParcel>(REPOSITORY_KEY).data
 
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "$owner/$repository"
+        supportActionBar?.title = "${repository.full_name}"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        loadRepositoryDetails(owner, repository)
-        loadRepositoryImage(imageUrl)
+        loadRepositoryDetails(repository.owner.login, repository.name)
+        loadRepositoryImage(repository.owner.avatar_url)
 
-        repositoryDetailFab.setOnClickListener { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(repositoryUrl))) }
+        repositoryDetailFab.setOnClickListener { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(repository.html_url))) }
 
         repositoryDetailWebView.setProgressChangedListener { progress -> repositoryDetailSpinner.showIf(progress < 100) }
     }
