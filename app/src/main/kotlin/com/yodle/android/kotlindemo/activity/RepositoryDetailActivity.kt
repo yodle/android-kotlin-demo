@@ -2,12 +2,9 @@ package com.yodle.android.kotlindemo.activity
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.graphics.Palette
-import com.squareup.picasso.Picasso
 import com.yodle.android.kotlindemo.MainApp
 import com.yodle.android.kotlindemo.R
 import com.yodle.android.kotlindemo.extension.*
@@ -71,29 +68,23 @@ class RepositoryDetailActivity : BaseActivity(), Observer<RepositoryReadme> {
     }
 
     fun loadRepositoryImage(imageUrl: String) {
-        Picasso.with(this).load(imageUrl).into(
-                repositoryDetailImage,
-                onSuccess = { setToolbarColorFromImage() },
-                onError = { Timber.e("Failed to load image") }
-        )
+        repositoryDetailImage.loadUrl(imageUrl) {
+            onSuccess { setToolbarColorFromImage() }
+            onError { Timber.e("Failed to load image") }
+        }
     }
 
     fun setToolbarColorFromImage() {
-        val bitmap = (repositoryDetailImage.drawable as BitmapDrawable).bitmap
+        repositoryDetailImage.generatePalette gen@ {
+            val swatch = it.mutedSwatch ?: it.vibrantSwatch ?: it.lightMutedSwatch ?: it.lightVibrantSwatch ?: return@gen
+            val backgroundColor = swatch.rgb
+            val titleTextColor = swatch.titleTextColor
 
-        Palette.from(bitmap).generate {
-            val swatch = it.mutedSwatch ?: it.vibrantSwatch ?: it.lightMutedSwatch ?: it.lightVibrantSwatch
-            if (swatch != null) {
-                val backgroundColor = swatch.rgb
-                val darkBackgroundColor = swatch.rgb
-                val titleTextColor = swatch.titleTextColor
-
-                toolbar.setTitleTextColor(titleTextColor)
-                toolbarLayout.setContentScrimColor(backgroundColor)
-                toolbarLayout.setBackgroundColor(backgroundColor)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    window.statusBarColor = darkBackgroundColor
-                }
+            toolbar.setTitleTextColor(titleTextColor)
+            toolbarLayout.setBackgroundColor(backgroundColor)
+            toolbarLayout.setContentScrimColor(backgroundColor)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                window.statusBarColor = backgroundColor
             }
         }
     }
