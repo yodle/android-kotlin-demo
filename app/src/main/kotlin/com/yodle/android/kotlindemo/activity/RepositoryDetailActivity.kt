@@ -7,13 +7,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.graphics.Palette
-import android.view.View
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.yodle.android.kotlindemo.MainApp
 import com.yodle.android.kotlindemo.R
+import com.yodle.android.kotlindemo.extension.*
 import com.yodle.android.kotlindemo.model.Repository
 import com.yodle.android.kotlindemo.model.RepositoryReadme
 import com.yodle.android.kotlindemo.service.GitHubService
@@ -61,11 +58,7 @@ class RepositoryDetailActivity : BaseActivity(), Observer<RepositoryReadme> {
 
         repositoryDetailFab.setOnClickListener { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(repositoryUrl))) }
 
-        repositoryDetailWebView.setWebChromeClient(object : WebChromeClient() {
-            override fun onProgressChanged(view: WebView?, newProgress: Int) {
-                repositoryDetailSpinner.visibility = if (newProgress == 100) View.GONE else View.VISIBLE
-            }
-        })
+        repositoryDetailWebView.setProgressChangedListener { progress -> repositoryDetailSpinner.showIf(progress < 100) }
     }
 
     override fun onCompleted() {
@@ -73,7 +66,7 @@ class RepositoryDetailActivity : BaseActivity(), Observer<RepositoryReadme> {
 
     override fun onError(e: Throwable) {
         Timber.e(e, "Failed to load repository readme")
-        repositoryDetailSpinner.visibility = View.GONE
+        repositoryDetailSpinner.hide()
     }
 
     override fun onNext(readme: RepositoryReadme) {
@@ -81,20 +74,16 @@ class RepositoryDetailActivity : BaseActivity(), Observer<RepositoryReadme> {
     }
 
     fun loadRepositoryDetails(owner: String, repository: String) {
-        repositoryDetailSpinner.visibility = View.VISIBLE
+        repositoryDetailSpinner.show()
         subscribe(gitHubService.getRepositoryReadme(owner, repository), this)
     }
 
     fun loadRepositoryImage(imageUrl: String) {
-        Picasso.with(this).load(imageUrl).into(repositoryDetailImage, object : Callback {
-            override fun onSuccess() {
-                setToolbarColorFromImage()
-            }
-
-            override fun onError() {
-                Timber.e("Failed to load image")
-            }
-        })
+        Picasso.with(this).load(imageUrl).into(
+                repositoryDetailImage,
+                onSuccess = { setToolbarColorFromImage() },
+                onError = { Timber.e("Failed to load image") }
+        )
     }
 
     fun setToolbarColorFromImage() {
