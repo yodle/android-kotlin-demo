@@ -1,9 +1,9 @@
 package com.yodle.android.kotlindemo.activity
 
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : RxAppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

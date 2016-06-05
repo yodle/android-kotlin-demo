@@ -9,11 +9,20 @@ import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.widget.ImageView
+import android.widget.Toast
 import com.ocpsoft.pretty.time.PrettyTime
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
+import com.trello.rxlifecycle.ActivityEvent
+import com.trello.rxlifecycle.ActivityLifecycleProvider
+import com.trello.rxlifecycle.kotlin.bindUntilEvent
 import org.joda.time.DateTime
+import rx.Observable
+import rx.Observer
+import rx.Subscription
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import java.text.NumberFormat
 
 fun Long?.formatted() = if (this != null) NumberFormat.getInstance().format(this) else null
@@ -33,6 +42,14 @@ fun View.show() {
 fun View.hide() {
     this.visibility = View.GONE
 }
+
+fun Context.toastShort(text: CharSequence) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+
+fun Context.toastShort(resId: Int) = Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
+
+fun Context.toastLong(text: CharSequence) = Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+
+fun Context.toastLong(resId: Int) = Toast.makeText(this, resId, Toast.LENGTH_LONG).show()
 
 fun WebView.setProgressChangedListener(onProgressChanged: (Int) -> Unit) {
     this.setWebChromeClient(object : WebChromeClient() {
@@ -75,5 +92,44 @@ class KCallback : Callback {
 
     fun onError(function: () -> Unit) {
         this.onError = function
+    }
+}
+
+fun <T> Observable<T>.subscribeOnIo() = this.subscribeOn(Schedulers.io())
+
+fun <T> Observable<T>.subscribeUntilDestroy(activity: ActivityLifecycleProvider, observer: KObserver<T>.() -> Unit): Subscription {
+    return this.observeOn(AndroidSchedulers.mainThread())
+            .bindUntilEvent(activity, ActivityEvent.DESTROY)
+            .subscribe(KObserver<T>().apply(observer))
+}
+
+class KObserver<T> : Observer<T> {
+
+    private var onNext: ((T) -> Unit)? = null
+    private var onError: ((Throwable) -> Unit)? = null
+    private var onCompleted: (() -> Unit)? = null
+
+    override fun onNext(t: T) {
+        onNext?.invoke(t)
+    }
+
+    override fun onError(e: Throwable) {
+        onError?.invoke(e)
+    }
+
+    override fun onCompleted() {
+        onCompleted?.invoke()
+    }
+
+    fun onNext(function: (T) -> Unit) {
+        this.onNext = function
+    }
+
+    fun onError(function: (Throwable) -> Unit) {
+        this.onError = function
+    }
+
+    fun onCompleted(function: () -> Unit) {
+        this.onCompleted = function
     }
 }

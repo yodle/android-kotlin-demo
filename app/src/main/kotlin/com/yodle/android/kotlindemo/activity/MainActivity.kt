@@ -2,25 +2,19 @@ package com.yodle.android.kotlindemo.activity
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.widget.Toast
 import com.jakewharton.rxbinding.widget.RxTextView
 import com.yodle.android.kotlindemo.MainApp
 import com.yodle.android.kotlindemo.R
 import com.yodle.android.kotlindemo.adapter.RepositoryAdapter
-import com.yodle.android.kotlindemo.extension.hide
-import com.yodle.android.kotlindemo.extension.show
-import com.yodle.android.kotlindemo.model.Repository
+import com.yodle.android.kotlindemo.extension.*
 import com.yodle.android.kotlindemo.service.GitHubService
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
-import rx.Observer
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class MainActivity : BaseActivity(), Observer<List<Repository>> {
+class MainActivity : BaseActivity() {
 
     @Inject lateinit var gitHubService: GitHubService
 
@@ -34,21 +28,6 @@ class MainActivity : BaseActivity(), Observer<List<Repository>> {
         setSupportActionBar(toolbar)
         setUpRecyclerView()
         setUpSearchView()
-    }
-
-    override fun onCompleted() {
-    }
-
-    override fun onError(e: Throwable) {
-        Timber.e(e, "Failed to load repositories")
-        Toast.makeText(this, "Error performing search, disabling search field", Toast.LENGTH_SHORT).show()
-        mainResultsSpinner.hide()
-    }
-
-    override fun onNext(repositories: List<Repository>) {
-        mainResultsSpinner.hide()
-        repositoryAdapter.repositories = repositories
-        repositoryAdapter.notifyDataSetChanged()
     }
 
     fun setUpRecyclerView() {
@@ -65,8 +44,17 @@ class MainActivity : BaseActivity(), Observer<List<Repository>> {
         RxTextView.textChanges(searchEditText)
                 .doOnNext { mainResultsSpinner.show() }
                 .sample(1, TimeUnit.SECONDS)
-                .switchMap { gitHubService.searchRepositories(it.toString()).subscribeOn(Schedulers.io()) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this)
+                .switchMap { gitHubService.searchRepositories(it.toString()).subscribeOnIo() }
+                .subscribeUntilDestroy(this) {
+                    onNext {
+                        repositoryAdapter.loadRepositories(it)
+                        mainResultsSpinner.hide()
+                    }
+                    onError {
+                        Timber.e(it, "Failed to load repositories")
+                        toastShort(R.string.search_repositories_error)
+                        mainResultsSpinner.hide()
+                    }
+                }
     }
 }
