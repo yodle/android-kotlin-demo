@@ -36,6 +36,7 @@ abstract class BaseActivity : AppCompatActivity() {
         compositeSubscription.add(
                 observable.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(observer))
+                        .subscribe(observer)
+        )
     }
 }
