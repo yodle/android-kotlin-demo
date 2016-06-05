@@ -16,7 +16,15 @@
 #   public *;
 #}
 
+# retrofit 2
 -dontwarn retrofit2.**
 -keep class retrofit2.** { *; }
 -keepattributes Signature
 -keepattributes Exceptions
+
+# paper parcel
+-dontwarn org.jetbrains.annotations.**
+-keepclassmembers class nz.bradcampbell.paperparcel.PaperParcelMapping {
+  static ** FROM_ORIGINAL;
+  static ** FROM_PARCELABLE;
+}
