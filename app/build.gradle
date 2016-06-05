@@ -57,6 +57,8 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.0'
     compile 'io.reactivex:rxkotlin:0.55.0'
     compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    compile 'com.trello:rxlifecycle-kotlin:0.6.1'
+    compile 'com.trello:rxlifecycle-components:0.6.1'
 
     // Date
     compile 'net.danlew:android.joda:2.9.3.1'
