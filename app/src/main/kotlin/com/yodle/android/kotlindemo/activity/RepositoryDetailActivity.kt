@@ -14,6 +14,8 @@ import com.yodle.android.kotlindemo.model.RepositoryReadme
 import com.yodle.android.kotlindemo.service.GitHubService
 import kotlinx.android.synthetic.main.activity_repository_detail.*
 import rx.Observer
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -63,8 +65,11 @@ class RepositoryDetailActivity : BaseActivity(), Observer<RepositoryReadme> {
     }
 
     fun loadRepositoryDetails(owner: String, repository: String) {
-        repositoryDetailSpinner.show()
-        subscribe(gitHubService.getRepositoryReadme(owner, repository), this)
+        gitHubService.getRepositoryReadme(owner, repository)
+                .doOnSubscribe { repositoryDetailSpinner.show() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this)
     }
 
     fun loadRepositoryImage(imageUrl: String) {
