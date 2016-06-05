@@ -16,7 +16,7 @@ import java.text.NumberFormat
 
 fun Long?.formatted() = if (this != null) NumberFormat.getInstance().format(this) else null
 
-fun Context.inflateLayout(resource: Int, root: ViewGroup, attachToRoot: Boolean = false): View {
+fun Context.inflateLayout(resource: Int, root: ViewGroup? = null, attachToRoot: Boolean = false): View {
     return LayoutInflater.from(this).inflate(resource, root, attachToRoot)
 }
 
