@@ -2,10 +2,10 @@ package com.yodle.android.kotlindemo.view
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.FrameLayout
 import com.yodle.android.kotlindemo.R
+import com.yodle.android.kotlindemo.extension.inflateLayout
 import kotlinx.android.synthetic.main.search_card.view.*
 
 class SearchCardView : FrameLayout {
@@ -23,8 +23,7 @@ class SearchCardView : FrameLayout {
     }
 
     fun init(context: Context) {
-        LayoutInflater.from(context).inflate(R.layout.search_card, this, true)
-
+        context.inflateLayout(R.layout.search_card, this, true)
         searchCardClear.setOnClickListener { searchCardEditText.text = null }
     }
 
