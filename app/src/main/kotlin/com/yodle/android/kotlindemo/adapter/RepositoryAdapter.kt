@@ -25,6 +25,11 @@ class RepositoryAdapter(val context: Context) : RecyclerView.Adapter<RepositoryA
 
     override fun onBindViewHolder(holder: RepositoryViewHolder, position: Int) = holder.bind(repositories.get(position))
 
+    fun loadRepositories(repositories: List<Repository>) {
+        this.repositories = repositories
+        notifyDataSetChanged()
+    }
+
     class RepositoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val context: Context = view.context
