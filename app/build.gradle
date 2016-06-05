@@ -65,6 +65,11 @@ dependencies {
     // Logging
     compile 'com.jakewharton.timber:timber:4.1.2'
 
+    // Parcelable Helper
+    compile 'com.github.grandstaish.paperparcel:paperparcel:1.0.0'
+    compile 'com.github.grandstaish.paperparcel:paperparcel-kotlin:1.0.0'
+    kapt 'com.github.grandstaish.paperparcel:compiler:1.0.0'
+
     testCompile 'junit:junit:4.12'
 }
 
@@ -81,4 +86,5 @@ buildscript {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
