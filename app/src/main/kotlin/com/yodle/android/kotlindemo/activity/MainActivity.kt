@@ -47,13 +47,17 @@ class MainActivity : BaseActivity() {
                 .switchMap { gitHubService.searchRepositories(it.toString()).subscribeOnIo() }
                 .subscribeUntilDestroy(this) {
                     onNext {
-                        repositoryAdapter.loadRepositories(it)
                         mainResultsSpinner.hide()
+                        repositoryAdapter.loadRepositories(it)
                     }
                     onError {
                         Timber.e(it, "Failed to load repositories")
-                        toastShort(R.string.search_repositories_error)
                         mainResultsSpinner.hide()
+                        alert {
+                            setTitle(R.string.error)
+                            setMessage(R.string.search_repositories_error)
+                            setPositiveButton(android.R.string.ok, null)
+                        }
                     }
                 }
     }

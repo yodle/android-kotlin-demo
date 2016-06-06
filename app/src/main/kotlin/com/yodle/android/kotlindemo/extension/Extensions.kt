@@ -1,5 +1,6 @@
 package com.yodle.android.kotlindemo.extension
 
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.drawable.BitmapDrawable
 import android.support.v7.graphics.Palette
@@ -29,6 +30,10 @@ fun Long?.formatted() = if (this != null) NumberFormat.getInstance().format(this
 
 fun Context.inflateLayout(resource: Int, root: ViewGroup? = null, attachToRoot: Boolean = false): View {
     return LayoutInflater.from(this).inflate(resource, root, attachToRoot)
+}
+
+inline fun Context.alert(func: AlertDialog.Builder.() -> AlertDialog.Builder) {
+    AlertDialog.Builder(this).func().show()
 }
 
 fun View.showIf(show: Boolean) {
