@@ -14,6 +14,5 @@
     <dimen name="secondary_font_size">13sp</dimen>
 
     <dimen name="app_bar_height">300dp</dimen>
-    <dimen name="fab_margin">@dimen/material_padding</dimen>
 
 </resources>
