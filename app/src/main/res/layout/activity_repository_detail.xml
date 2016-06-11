@@ -68,7 +68,7 @@
         android:id="@+id/repositoryDetailFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_margin="@dimen/material_padding"
         android:src="@drawable/ic_open_in_browser"
         android:tint="#ffffff"
         app:layout_anchor="@id/appBar"
