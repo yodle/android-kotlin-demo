@@ -6,7 +6,7 @@ import rx.Observable
 import java.util.*
 import javax.inject.Inject
 
-class GitHubService {
+open class GitHubService {
 
     @Inject lateinit var gitHubApiService: GitHubApiService
 
@@ -14,7 +14,7 @@ class GitHubService {
         MainApp.graph.inject(this)
     }
 
-    fun searchRepositories(query: String): Observable<List<Repository>> {
+    open fun searchRepositories(query: String): Observable<List<Repository>> {
         if (query.isBlank()) {
             return Observable.just(ArrayList())
         } else {
