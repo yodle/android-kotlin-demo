@@ -7,7 +7,7 @@ import com.yodle.android.kotlindemo.dagger.DaggerAppComponent
 import net.danlew.android.joda.JodaTimeAndroid
 import timber.log.Timber
 
-class MainApp : Application() {
+open class MainApp : Application() {
 
     companion object {
         @JvmStatic lateinit var graph: AppComponent
@@ -20,6 +20,10 @@ class MainApp : Application() {
 
         JodaTimeAndroid.init(this)
 
+        initializeGraph()
+    }
+
+    open fun initializeGraph() {
         graph = DaggerAppComponent.builder().appModule(AppModule(this)).build()
         graph.inject(this)
     }
