@@ -12,6 +12,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "com.yodle.android.kotlindemo.EspressoTestRunner"
     }
     buildTypes {
         release {
@@ -21,6 +22,8 @@ android {
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
 }
 
@@ -72,7 +75,20 @@ dependencies {
     compile 'com.github.grandstaish.paperparcel:paperparcel-kotlin:1.0.0'
     kapt 'com.github.grandstaish.paperparcel:compiler:1.0.0'
 
+    // Testing
     testCompile 'junit:junit:4.12'
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testCompile 'org.mockito:mockito-core:1.10.19'
+
+    // Android Testing
+    kaptAndroidTest 'com.google.dagger:dagger-compiler:2.4'
+    androidTestCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    androidTestCompile 'org.mockito:mockito-core:1.10.19'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
+        exclude module: 'support-annotations'
+    }
 }
 
 buildscript {
