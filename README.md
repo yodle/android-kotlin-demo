@@ -3,7 +3,7 @@ A demo of an Android app using Kotlin
 
 ![Icon](app/src/main/res/mipmap-hdpi/ic_launcher.png)
 
-## Incorporates the following libraries &amp; concepts
+### Incorporates the following libraries &amp; concepts
 ```
 * Dagger
 * Retrofit
@@ -21,3 +21,5 @@ A demo of an Android app using Kotlin
 * Espresso Testing with Dagger mocking
 * Unit Testing
 ```
+
+![Demo](demo.gif)
