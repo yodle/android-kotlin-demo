@@ -11,6 +11,7 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
+        android:background="@color/material_black"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -19,8 +20,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
+            android:visibility="invisible"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:statusBarScrim="@android:color/transparent">
 
             <ImageView
                 android:id="@+id/repositoryDetailImage"
@@ -56,13 +59,14 @@
     </android.support.v4.widget.NestedScrollView>
 
     <ProgressBar
-        android:id="@+id/repositoryDetailSpinner"
-        style="?android:progressBarStyle"
-        android:layout_width="wrap_content"
+        android:id="@+id/repositoryDetailProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="200dp"
-        android:visibility="gone" />
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_anchor="@id/appBar"
+        app:layout_anchorGravity="bottom" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/repositoryDetailFab"
