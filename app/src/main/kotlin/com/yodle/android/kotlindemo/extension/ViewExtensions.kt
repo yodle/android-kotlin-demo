@@ -1,6 +1,10 @@
 package com.yodle.android.kotlindemo.extension
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.os.Build
 import android.view.View
+import android.view.ViewAnimationUtils
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 
@@ -26,4 +30,30 @@ inline fun WebView.setProgressChangedListener(crossinline onProgressChanged: (In
             onProgressChanged.invoke(newProgress)
         }
     })
+}
+
+fun View.circularReveal(backgroundColor: Int) {
+    val showAndSetBackgroundColorFunction = {
+        this.setBackgroundColor(backgroundColor)
+        this.visibility = View.VISIBLE
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        this.post {
+            val cx = this.width / 2
+            val cy = this.height / 2
+            val finalRadius = Math.hypot(cx.toDouble(), cy.toDouble()).toFloat()
+
+            val animator = ViewAnimationUtils.createCircularReveal(this, cx, cy, 0f, finalRadius)
+            animator.startDelay = 50
+            animator.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator?) {
+                    showAndSetBackgroundColorFunction.invoke()
+                }
+            })
+            animator.start()
+        }
+    } else {
+        showAndSetBackgroundColorFunction.invoke()
+    }
 }
