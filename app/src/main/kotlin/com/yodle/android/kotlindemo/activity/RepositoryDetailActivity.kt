@@ -3,8 +3,8 @@ package com.yodle.android.kotlindemo.activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
+import android.view.View
 import com.yodle.android.kotlindemo.MainApp
 import com.yodle.android.kotlindemo.R
 import com.yodle.android.kotlindemo.extension.*
@@ -43,12 +43,12 @@ class RepositoryDetailActivity : BaseActivity() {
         loadRepositoryDetails(repository.owner.login, repository.name)
         loadRepositoryImage(repository.owner.avatar_url)
         repositoryDetailFab.setOnClickListener { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(repository.html_url))) }
-        repositoryDetailWebView.setProgressChangedListener { progress -> repositoryDetailSpinner.showIf(progress < 100) }
+        repositoryDetailWebView.setProgressChangedListener { progress -> repositoryDetailProgressBar.showIf(progress < 100) }
     }
 
     fun loadRepositoryDetails(owner: String, repository: String) {
         gitHubService.getRepositoryReadme(owner, repository)
-                .doOnSubscribe { repositoryDetailSpinner.show() }
+                .doOnSubscribe { repositoryDetailProgressBar.show() }
                 .subscribeOnIo()
                 .subscribeUntilDestroy(this) {
                     onNext {
@@ -56,7 +56,7 @@ class RepositoryDetailActivity : BaseActivity() {
                     }
                     onError {
                         Timber.e(it, "Failed to load repository readme")
-                        repositoryDetailSpinner.hide()
+                        repositoryDetailProgressBar.hide()
                     }
                 }
     }
@@ -68,6 +68,7 @@ class RepositoryDetailActivity : BaseActivity() {
             }
             onError {
                 Timber.e("Failed to load image")
+                toolbarLayout.visibility = View.VISIBLE
             }
         }
     }
@@ -79,11 +80,8 @@ class RepositoryDetailActivity : BaseActivity() {
             val titleTextColor = swatch.titleTextColor
 
             toolbar.setTitleTextColor(titleTextColor)
-            toolbarLayout.setBackgroundColor(backgroundColor)
+            toolbarLayout.circularReveal(backgroundColor)
             toolbarLayout.setContentScrimColor(backgroundColor)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                window.statusBarColor = backgroundColor
-            }
         }
     }
 }
