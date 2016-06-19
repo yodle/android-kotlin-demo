@@ -10,6 +10,8 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="AppThemeTransparentStatusBar" />
+
     <style name="PrimaryTextStyle">
         <item name="android:fontFamily">@string/sans_serif</item>
         <item name="android:textColor">@color/primary_text</item>
