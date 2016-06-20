@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import android.webkit.WebChromeClient
 import android.webkit.WebView
+import timber.log.Timber
 
 fun View.showIf(show: Boolean) {
     if (show) {
@@ -44,14 +45,18 @@ fun View.circularReveal(backgroundColor: Int) {
             val cy = this.height / 2
             val finalRadius = Math.hypot(cx.toDouble(), cy.toDouble()).toFloat()
 
-            val animator = ViewAnimationUtils.createCircularReveal(this, cx, cy, 0f, finalRadius)
-            animator.startDelay = 50
-            animator.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationStart(animation: Animator?) {
-                    showAndSetBackgroundColorFunction.invoke()
-                }
-            })
-            animator.start()
+            try {
+                val animator = ViewAnimationUtils.createCircularReveal(this, cx, cy, 0f, finalRadius)
+                animator.startDelay = 50
+                animator.addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationStart(animation: Animator?) {
+                        showAndSetBackgroundColorFunction.invoke()
+                    }
+                })
+                animator.start()
+            } catch(e: Exception) {
+                Timber.e(e, "Unable to perform circular reveal")
+            }
         }
     } else {
         showAndSetBackgroundColorFunction.invoke()
