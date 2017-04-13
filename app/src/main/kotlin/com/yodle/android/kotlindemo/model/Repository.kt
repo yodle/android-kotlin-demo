@@ -9,7 +9,7 @@ data class Repository(
         val full_name: String,
         val owner: RepositoryOwner,
         val html_url: String,
-        val description: String,
+        val description: String?,
         val url: String,
         val created_at: String,
         val updated_at: String,
