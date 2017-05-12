@@ -7,6 +7,10 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
 
+    dataBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.yodle.android.kotlindemo"
         minSdkVersion 16
@@ -34,12 +38,13 @@ dependencies {
     // Kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
+    ext.supportLibVersion = "25.3.1"
     // Support Libraries
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
-    compile 'com.android.support:cardview-v7:23.4.0'
-    compile 'com.android.support:palette-v7:23.4.0'
+    compile "com.android.support:appcompat-v7:${supportLibVersion}"
+    compile "com.android.support:design:${supportLibVersion}"
+    compile "com.android.support:recyclerview-v7:${supportLibVersion}"
+    compile "com.android.support:cardview-v7:${supportLibVersion}"
+    compile "com.android.support:palette-v7:${supportLibVersion}"
 
     // Dagger 2
     compile 'com.google.dagger:dagger:2.4'
@@ -71,6 +76,9 @@ dependencies {
     compile 'com.github.grandstaish.paperparcel:paperparcel:1.0.0'
     compile 'com.github.grandstaish.paperparcel:paperparcel-kotlin:1.0.0'
     kapt 'com.github.grandstaish.paperparcel:compiler:1.0.0'
+
+    // Data Binding
+    kapt "com.android.databinding:compiler:2.4.0-alpha7"
 
     // Testing
     testCompile 'junit:junit:4.12'
