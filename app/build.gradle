@@ -1,9 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: "org.jetbrains.kotlin.kapt"
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 25
     buildToolsVersion "25.0.2"
 
     defaultConfig {
@@ -25,10 +26,6 @@ android {
         test.java.srcDirs += 'src/test/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
-}
-
-kapt {
-    generateStubs = true
 }
 
 dependencies {
@@ -92,9 +89,10 @@ dependencies {
 }
 
 buildscript {
-    ext.kotlin_version = '1.1.1'
+    ext.kotlin_version = '1.1.2-3'
     repositories {
         jcenter()
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap-1.1' }	
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -105,4 +103,5 @@ buildscript {
 repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap-1.1' }	
 }
