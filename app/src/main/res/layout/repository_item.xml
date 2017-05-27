@@ -1,82 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:id="@+id/repositoryItemRootLayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:paddingTop="@dimen/material_padding">
+<layout>
+    <data>
+        <import type="java.text.NumberFormat"/>
+        <variable
+            name="repo"
+            type="com.yodle.android.kotlindemo.model.Repository"/>
+        <variable
+            name="pushedDate"
+            type="String"/>
+    </data>
 
-    <ImageView
-        android:id="@+id/repositoryItemImage"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="@dimen/material_padding"
-        android:layout_marginLeft="@dimen/material_padding"
-        tools:src="@mipmap/ic_launcher" />
-
-    <LinearLayout
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/repositoryItemRootLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/material_padding"
-        android:layout_marginLeft="@dimen/material_list_padding_left"
-        android:layout_marginRight="@dimen/material_padding"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/repositoryItemTitle"
-            style="@style/PrimaryTextStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/material_padding_quarter"
-            android:layout_marginRight="@dimen/material_padding_double"
-            android:ellipsize="end"
-            android:lines="1"
-            tools:text="JetBrains/kotlin" />
-
-        <TextView
-            android:id="@+id/repositoryItemDescription"
-            style="@style/SecondaryTextStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/material_padding_quarter"
-            tools:text="The Kotlin Programming Language" />
-
-        <TextView
-            android:id="@+id/repositoryItemLastUpdated"
-            style="@style/SecondaryTextStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="Updated 6 hours ago" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingRight="@dimen/material_padding">
-
-        <TextView
-            android:id="@+id/repositoryItemStarCount"
-            style="@style/SecondaryTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/material_padding_quarter"
-            android:textColor="@color/primary_text"
-            tools:text="532" />
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:paddingTop="@dimen/material_padding">
 
         <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_star" />
-    </LinearLayout>
+            android:id="@+id/repositoryItemImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="@dimen/material_padding"
+            android:layout_marginLeft="@dimen/material_padding"
+            tools:src="@mipmap/ic_launcher"/>
 
-    <View
-        style="@style/HorizontalDividerStyle"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="@dimen/material_list_padding_left" />
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/material_padding"
+            android:layout_marginLeft="@dimen/material_list_padding_left"
+            android:layout_marginRight="@dimen/material_padding"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/repositoryItemTitle"
+                android:text="@{repo.full_name}"
+                style="@style/PrimaryTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/material_padding_quarter"
+                android:layout_marginRight="@dimen/material_padding_double"
+                android:ellipsize="end"
+                android:lines="1"
+                tools:text="JetBrains/kotlin"/>
+
+            <TextView
+                android:id="@+id/repositoryItemDescription"
+                android:text="@{repo.description}"
+                style="@style/SecondaryTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/material_padding_quarter"
+                tools:text="The Kotlin Programming Language"/>
+
+            <TextView
+                android:id="@+id/repositoryItemLastUpdated"
+                android:text='@{"Updated" + pushedDate}'
+                style="@style/SecondaryTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Updated 6 hours ago"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingRight="@dimen/material_padding">
+
+            <TextView
+                android:id="@+id/repositoryItemStarCount"
+                android:text='@{NumberFormat.getInstance().format(repo.watchers_count)}'
+                style="@style/SecondaryTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/material_padding_quarter"
+                android:textColor="@color/primary_text"
+                tools:text="532"/>
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_star"/>
+        </LinearLayout>
+
+        <View
+            style="@style/HorizontalDividerStyle"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="@dimen/material_list_padding_left"/>
+    </FrameLayout>
+</layout>
